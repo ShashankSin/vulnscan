@@ -1,0 +1,17 @@
+# ─── Render Blueprint ────────────────────────────────────────────
+# This file auto-configures deployment when connected to Render.
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: vulnscan
+    runtime: docker
+    repo: https://github.com/ShashankSin/web-application-vulnerability-scanner-front-end # ← Update this
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    healthCheckPath: /
