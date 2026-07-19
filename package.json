@@ -1,0 +1,12 @@
+{
+  "dependencies": {},
+  "name": "web-application",
+  "scripts": {
+    "backend": "cd backend && source venv/bin/activate && flask run",
+    "frontend": "cd frontend && bun run dev",
+    "dev": "concurrently \"bun run backend\" \"bun run frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.1"
+  }
+}
