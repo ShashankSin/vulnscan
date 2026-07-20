@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -12,8 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Search, Download } from "lucide-react";
-
+import { Search, Download, ArrowRight } from "lucide-react";
 import LinkComponent from "@/components/ui/Link";
 import { scanAPI } from "@/api/scanApi";
 
@@ -27,6 +25,7 @@ interface Scan {
 
 export default function ScansPage() {
   const [scans, setScans] = useState<Scan[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchScans = async () => {
@@ -41,18 +40,22 @@ export default function ScansPage() {
     fetchScans();
   }, []);
 
+  const filteredScans = scans.filter((scan) =>
+    scan.url.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case "critical":
-        return "bg-red-500/20 text-red-700 hover:bg-red-500/30";
+        return "bg-red-500/20 text-red-700 hover:bg-red-500/30 border border-red-500/30";
       case "high":
-        return "bg-orange-500/20 text-orange-700 hover:bg-orange-500/30";
+        return "bg-orange-500/20 text-orange-700 hover:bg-orange-500/30 border border-orange-500/30";
       case "medium":
-        return "bg-yellow-500/20 text-yellow-700 hover:bg-yellow-500/30";
+        return "bg-yellow-500/20 text-yellow-700 hover:bg-yellow-500/30 border border-yellow-500/30";
       case "low":
-        return "bg-blue-500/20 text-blue-700 hover:bg-blue-500/30";
+        return "bg-blue-500/20 text-blue-700 hover:bg-blue-500/30 border border-blue-500/30";
       default:
-        return "bg-green-500/20 text-green-700 hover:bg-green-500/30";
+        return "bg-green-500/20 text-green-700 hover:bg-green-500/30 border border-green-500/30";
     }
   };
 
@@ -65,85 +68,140 @@ export default function ScansPage() {
     return "info";
   };
 
+  const numberOfIssue = (summary: Record<string, number> | null) => {
+    if (!summary) return 0;
+    return (
+      (summary.critical || 0) +
+      (summary.high || 0) +
+      (summary.medium || 0) +
+      (summary.low || 0)
+    );
+  };
+
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-3xl font-bold">Scan History</h2>
-        <p className="text-muted-foreground">
-          View all your past vulnerability scans
-        </p>
+      {/* HEADER */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-foreground">Scan History</h1>
+            <p className="text-muted-foreground mt-1">
+              View and manage all your vulnerability scans
+            </p>
+          </div>
+        </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex justify-between gap-4">
-            <CardTitle>All Scans</CardTitle>
+      {/* SEARCH & ACTIONS */}
+      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+        <div className="relative w-full sm:w-64">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            className="pl-10 bg-secondary/50 border-border hover:bg-secondary/70 transition-colors"
+            placeholder="Search by domain..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
 
-            <div className="flex gap-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-2.5 w-4 h-4" />
-                <Input className="pl-10" placeholder="Search domains..." />
-              </div>
+        <Button className="gap-2 whitespace-nowrap">
+          <Download className="w-4 h-4" />
+          Export All
+        </Button>
+      </div>
 
-              <Button size="sm">
-                <Download className="w-4 h-4 mr-2" />
-                Export
-              </Button>
-            </div>
-          </div>
+      {/* SCANS TABLE */}
+      <Card className="border-border/50 shadow-lg">
+        <CardHeader className="bg-secondary/30 border-b border-border/50">
+          <CardTitle className="text-lg">All Scans</CardTitle>
+          <p className="text-sm text-muted-foreground mt-1">
+            {filteredScans.length} scan{filteredScans.length !== 1 ? "s" : ""}{" "}
+            found
+          </p>
         </CardHeader>
 
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Domain</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Threats</TableHead>
-                <TableHead>Severity</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-right">Action</TableHead>
-              </TableRow>
-            </TableHeader>
+        <CardContent className="p-0">
+          {filteredScans.length > 0 ? (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-b border-border/50 hover:bg-transparent">
+                    <TableHead className="text-muted-foreground">
+                      Domain
+                    </TableHead>
+                    <TableHead className="text-muted-foreground">
+                      Status
+                    </TableHead>
+                    <TableHead className="text-muted-foreground">
+                      Issues
+                    </TableHead>
+                    <TableHead className="text-muted-foreground">
+                      Severity
+                    </TableHead>
+                    <TableHead className="text-muted-foreground">
+                      Scanned
+                    </TableHead>
+                    <TableHead className="text-right text-muted-foreground">
+                      Action
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
 
-            <TableBody>
-              {scans.map((scan) => (
-                <TableRow key={scan.id}>
-                  <TableCell>{scan.url}</TableCell>
-
-                  <TableCell>
-                    <Badge className="bg-green-500/20 text-green-700">
-                      Completed
-                    </Badge>
-                  </TableCell>
-
-                  <TableCell>{scan.results?.length || 0}</TableCell>
-
-                  <TableCell>
-                    <Badge
-                      className={getSeverityColor(
-                        getHighestSeverity(scan.severity_summary) || "info",
-                      )}
+                <TableBody>
+                  {filteredScans.map((scan) => (
+                    <TableRow
+                      key={scan.id}
+                      className="border-b border-border/30 hover:bg-secondary/20 transition-colors"
                     >
-                      {getHighestSeverity(
-                        scan.severity_summary,
-                      )?.toUpperCase() || "NONE"}
-                    </Badge>
-                  </TableCell>
+                      <TableCell className="font-medium text-foreground">
+                        {scan.url}
+                      </TableCell>
 
-                  <TableCell>
-                    {new Date(scan.timestamp).toLocaleString()}
-                  </TableCell>
+                      <TableCell>
+                        <Badge className="bg-green-500/20 text-green-600 border border-green-500/30">
+                          ✓ Completed
+                        </Badge>
+                      </TableCell>
 
-                  <TableCell className="text-right">
-                    <LinkComponent href={`/dashboard/scans/${scan.id}`}>
-                      View
-                    </LinkComponent>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                      <TableCell className="text-foreground font-semibold">
+                        {numberOfIssue(scan.severity_summary) || 0}
+                      </TableCell>
+
+                      <TableCell>
+                        <Badge
+                          className={`capitalize font-medium ${getSeverityColor(
+                            getHighestSeverity(scan.severity_summary) || "info",
+                          )}`}
+                        >
+                          {getHighestSeverity(
+                            scan.severity_summary,
+                          )?.toUpperCase() || "NONE"}
+                        </Badge>
+                      </TableCell>
+
+                      <TableCell className="text-sm text-muted-foreground">
+                        {new Date(scan.timestamp).toLocaleDateString()} at{" "}
+                        {new Date(scan.timestamp).toLocaleTimeString()}
+                      </TableCell>
+
+                      <TableCell className="text-right">
+                        <LinkComponent
+                          href={`/dashboard/scans/${scan.id}`}
+                          className="inline-flex items-center gap-1 text-accent hover:gap-2 transition-all text-sm font-medium"
+                        >
+                          View <ArrowRight className="w-4 h-4" />
+                        </LinkComponent>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <div className="p-8 text-center text-muted-foreground">
+              No scans found. Start by running a new scan.
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

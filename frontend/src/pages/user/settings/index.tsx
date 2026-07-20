@@ -47,7 +47,7 @@ export default function SettingsPage() {
                   </Label>
                   <Input
                     id="first-name"
-                    defaultValue="John"
+                    defaultValue="Shashank"
                     className="border-border"
                   />
                 </div>
@@ -57,7 +57,7 @@ export default function SettingsPage() {
                   </Label>
                   <Input
                     id="last-name"
-                    defaultValue="Doe"
+                    defaultValue="Singh"
                     className="border-border"
                   />
                 </div>
@@ -69,7 +69,7 @@ export default function SettingsPage() {
                 <Input
                   id="email"
                   type="email"
-                  defaultValue="john@example.com"
+                  defaultValue="shashank@example.com"
                   className="border-border"
                 />
               </div>
