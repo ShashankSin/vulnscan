@@ -1,48 +1,46 @@
-import { Terminal } from "lucide-react";
+import { Shield } from "lucide-react";
 
 export function Footer() {
-  const date = new Date();
-  const currentYear = date.getFullYear();
-
   return (
-    <footer className="border-t border-accent/30 bg-background">
+    <footer className="border-t border-border bg-background">
       <div className="container max-w-7xl mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="terminal-border p-2">
-                <Terminal className="w-5 h-5 text-accent" />
+              <div className="p-2 bg-accent rounded-lg">
+                <Shield className="w-5 h-5 text-accent-foreground" />
               </div>
-              <span className="font-mono font-bold text-accent glow-text">
-                VULNSCAN
-              </span>
+              <span className="font-bold text-foreground">VulnScan</span>
             </div>
-            <p className="text-xs text-muted-foreground font-mono">
-              Enterprise vulnerability scanning for modern web applications.
-              Real-time threat detection.
+            <p className="text-sm text-muted-foreground">
+              Enterprise-grade vulnerability scanning for modern web
+              applications.
             </p>
           </div>
 
           {/* Product */}
           <div>
-            <h3 className="font-mono font-bold text-foreground mb-4 text-sm">
-              &gt; PRODUCT
-            </h3>
-            <ul className="space-y-2 text-xs text-muted-foreground font-mono">
+            <h3 className="font-semibold text-foreground mb-4">Product</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ features
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Features
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ security
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Pricing
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ api
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Security
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-foreground transition-colors">
+                  API
                 </a>
               </li>
             </ul>
@@ -50,28 +48,26 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="font-mono font-bold text-foreground mb-4 text-sm">
-              &gt; COMPANY
-            </h3>
-            <ul className="space-y-2 text-xs text-muted-foreground font-mono">
+            <h3 className="font-semibold text-foreground mb-4">Company</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ about
+                <a href="#" className="hover:text-foreground transition-colors">
+                  About
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ blog
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Blog
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ careers
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Careers
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ contact
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Contact
                 </a>
               </li>
             </ul>
@@ -79,68 +75,55 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-mono font-bold text-foreground mb-4 text-sm">
-              &gt; LEGAL
-            </h3>
-            <ul className="space-y-2 text-xs text-muted-foreground font-mono">
+            <h3 className="font-semibold text-foreground mb-4">Legal</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ privacy
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Privacy
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ terms
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Terms
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ compliance
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Compliance
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-accent transition-colors">
-                  $ sitemap
+                <a href="#" className="hover:text-foreground transition-colors">
+                  Sitemap
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-accent/30 pt-8">
-          {/* Bottom section */}
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-muted-foreground font-mono">
-              &copy; {currentYear} VulnScan. All rights reserved. // v1.0-prod
-            </p>
-            <div className="flex gap-6 font-mono text-xs">
-              <a
-                href="#"
-                className="text-muted-foreground hover:text-accent transition-colors"
-              >
-                twitter.com/vulnscan
-              </a>
-              <a
-                href="#"
-                className="text-muted-foreground hover:text-accent transition-colors"
-              >
-                github.com/vulnscan
-              </a>
-              <a
-                href="#"
-                className="text-muted-foreground hover:text-accent transition-colors"
-              >
-                linkedin.com/company/vulnscan
-              </a>
-            </div>
-          </div>
-
-          {/* System info */}
-          <div className="mt-6 pt-6 border-t border-accent/20 text-center font-mono text-xs text-muted-foreground space-y-1">
-            <div>&gt; SYSTEM UPTIME: 99.99%</div>
-            <div>&gt; RESPONSE_TIME: &lt;200ms</div>
-            <div>&gt; STATUS: OPERATIONAL</div>
+        <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-sm text-muted-foreground">
+            © 2024 VulnScan. All rights reserved.
+          </p>
+          <div className="flex gap-6 mt-4 md:mt-0">
+            <a
+              href="#"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Twitter
+            </a>
+            <a
+              href="#"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              GitHub
+            </a>
+            <a
+              href="#"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              LinkedIn
+            </a>
           </div>
         </div>
       </div>

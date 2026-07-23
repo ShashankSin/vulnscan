@@ -58,34 +58,26 @@ export default function ScanDetails() {
     {},
   );
 
-  const severityConfig: Record<
-    string,
-    { color: string; bgColor: string; icon: string }
-  > = {
+  const severityConfig: Record<string, { color: string; bgColor: string }> = {
     critical: {
       color: "text-red-600",
       bgColor: "bg-red-500/10 border-red-500/30",
-      icon: "🔴",
     },
     high: {
       color: "text-orange-600",
       bgColor: "bg-orange-500/10 border-orange-500/30",
-      icon: "🟠",
     },
     medium: {
       color: "text-yellow-600",
       bgColor: "bg-yellow-500/10 border-yellow-500/30",
-      icon: "🟡",
     },
     low: {
       color: "text-blue-600",
       bgColor: "bg-blue-500/10 border-blue-500/30",
-      icon: "🔵",
     },
     info: {
       color: "text-green-600",
       bgColor: "bg-green-500/10 border-green-500/30",
-      icon: "🟢",
     },
   };
 
@@ -186,7 +178,6 @@ export default function ScanDetails() {
             className={`border-border/50 ${severityConfig[level]?.bgColor}`}
           >
             <CardContent className="p-4 text-center">
-              <p className="text-2xl mb-2">{severityConfig[level]?.icon}</p>
               <p
                 className={`text-2xl font-bold ${severityConfig[level]?.color}`}
               >
@@ -212,9 +203,6 @@ export default function ScanDetails() {
             >
               <CardHeader className="pb-3 flex flex-row items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">
-                    {severityConfig[level]?.icon}
-                  </span>
                   <div>
                     <CardTitle className="capitalize text-lg">
                       {level} Severity Issues

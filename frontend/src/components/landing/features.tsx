@@ -1,6 +1,13 @@
 "use client";
 
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   AlertCircle,
   Zap,
   BarChart3,
@@ -12,42 +19,39 @@ import {
 const features = [
   {
     icon: AlertCircle,
-    title: "THREAT DETECTION",
+    title: "Real-time Threat Detection",
     description:
-      "Real-time vulnerability analysis with advanced detection algorithms",
-    number: "01",
+      "Continuously monitor your applications for vulnerabilities and security threats with our advanced detection engine.",
   },
   {
     icon: Zap,
-    title: "INSTANT ALERTS",
-    description: "Immediate threat notifications with severity classification",
-    number: "02",
+    title: "Instant Alerts",
+    description:
+      "Receive immediate notifications when vulnerabilities are detected so you can respond quickly.",
   },
   {
     icon: BarChart3,
-    title: "DETAILED REPORTS",
+    title: "Detailed Reports",
     description:
-      "Comprehensive vulnerability assessments with remediation paths",
-    number: "03",
+      "Get comprehensive vulnerability reports with severity levels, affected components, and remediation steps.",
   },
   {
     icon: Settings,
-    title: "EASY INTEGRATION",
-    description: "Seamless CI/CD pipeline integration and workflow automation",
-    number: "04",
+    title: "Easy Integration",
+    description:
+      "Seamlessly integrate with your CI/CD pipeline and existing development workflow in minutes.",
   },
   {
     icon: Lock,
-    title: "ENTERPRISE SECURITY",
-    description: "Military-grade encryption and OWASP compliance standards",
-    number: "05",
+    title: "Enterprise Security",
+    description:
+      "Enterprise-grade security standards with data encryption and compliance with OWASP standards.",
   },
   {
     icon: RefreshCw,
-    title: "CONTINUOUS MONITORING",
+    title: "Continuous Monitoring",
     description:
-      "24/7 security assessment and automated vulnerability tracking",
-    number: "06",
+      "Keep your applications secure with ongoing vulnerability assessments and automated scanning.",
   },
 ];
 
@@ -55,54 +59,45 @@ export function Features() {
   return (
     <section
       id="features"
-      className="py-20 md:py-32 px-4 bg-card border-t border-accent/30"
+      className="py-20 md:py-32 px-4 bg-card border-t border-border"
     >
       <div className="container max-w-7xl mx-auto">
-        {/* Section header */}
-        <div className="mb-16">
-          <div className="font-mono text-xs text-accent mb-4">
-            &gt; MODULE_FEATURES.INIT()
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4 font-mono">
-            <span className="glow-text">SCANNING</span> CAPABILITIES
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Powerful Security Features
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl font-mono">
-            $ identify &amp;&amp; eliminate web application vulnerabilities
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Everything you need to identify and eliminate web application
+            vulnerabilities
           </p>
         </div>
 
-        {/* Features grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div
+              <Card
                 key={index}
-                className="terminal-border p-6 hover:border-accent/60 transition-colors group bg-background/50"
+                className="border-border hover:shadow-lg transition-shadow"
               >
-                {/* Feature number */}
-                <div className="text-4xl font-mono text-accent/30 font-bold mb-4 group-hover:text-accent/50 transition-colors">
-                  {feature.number}
-                </div>
-
-                {/* Icon */}
-                <div className="mb-4">
-                  <Icon className="w-8 h-8 text-accent group-hover:glow-accent transition-all" />
-                </div>
-
-                {/* Title */}
-                <h3 className="text-lg font-mono font-bold text-foreground mb-3 group-hover:text-accent transition-colors">
-                  {feature.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-muted-foreground text-sm font-mono">
-                  {feature.description}
-                </p>
-
-                {/* Bottom accent line */}
-                <div className="h-px bg-accent/20 mt-4 group-hover:bg-accent/50 transition-colors"></div>
-              </div>
+                <CardHeader>
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-accent/10 rounded-lg">
+                      <Icon className="w-6 h-6 text-accent" />
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle className="text-foreground">
+                        {feature.title}
+                      </CardTitle>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-muted-foreground">
+                    {feature.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
             );
           })}
         </div>

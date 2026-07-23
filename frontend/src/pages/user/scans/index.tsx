@@ -8,10 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Search, Download, ArrowRight } from "lucide-react";
+import { Search, ArrowRight } from "lucide-react";
 import LinkComponent from "@/components/ui/Link";
 import { scanAPI } from "@/api/scanApi";
 
@@ -103,16 +102,11 @@ export default function ScansPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-
-        <Button className="gap-2 whitespace-nowrap">
-          <Download className="w-4 h-4" />
-          Export All
-        </Button>
       </div>
 
       {/* SCANS TABLE */}
       <Card className="border-border/50 shadow-lg">
-        <CardHeader className="bg-secondary/30 border-b border-border/50">
+        <CardHeader className="border-b border-border/50">
           <CardTitle className="text-lg">All Scans</CardTitle>
           <p className="text-sm text-muted-foreground mt-1">
             {filteredScans.length} scan{filteredScans.length !== 1 ? "s" : ""}{" "}
