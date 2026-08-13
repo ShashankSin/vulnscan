@@ -1,48 +1,43 @@
 import { Button } from "@/components/ui/button";
-import { Terminal } from "lucide-react";
+import { Shield } from "lucide-react";
+import { AnimatedThemeToggler } from "../ui/animated-theme-toggler";
 import LinkComponent from "../ui/Link";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-accent/30 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="terminal-border p-2">
-            <Terminal className="w-5 h-5 text-accent glow-accent" />
+        <div className="flex items-center gap-2">
+          <div className="p-2 bg-accent rounded-lg">
+            <Shield className="w-6 h-6 text-accent-foreground" />
           </div>
-          <LinkComponent
-            href="/"
-            className="font-mono font-bold text-lg text-accent glow-text"
-          >
-            VULNSCAN v1.0
-          </LinkComponent>
-          <span className="text-xs text-muted-foreground ml-2">
-            // SYS.ONLINE
-          </span>
+          <span className="font-bold text-xl text-foreground">VulnScan</span>
         </div>
-        <nav className="hidden md:flex items-center gap-8 font-mono text-sm">
+        <nav className="hidden md:flex items-center gap-8">
           <a
             href="#features"
-            className="text-muted-foreground hover:text-accent transition-colors hover:glow-text"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
-            &gt; features
+            Features
           </a>
           <a
             href="#benefits"
-            className="text-muted-foreground hover:text-accent transition-colors hover:glow-text"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
-            &gt; stats
+            Benefits
+          </a>
+          <a
+            href="#pricing"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Pricing
           </a>
         </nav>
         <div className="flex items-center gap-4">
+          <AnimatedThemeToggler />
           <LinkComponent href="/login">
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground font-mono text-xs">
-              LOGIN
-            </Button>
-          </LinkComponent>
-          <LinkComponent href="/register">
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground font-mono text-xs">
-              SIGNUP
+            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
+              Get Started
             </Button>
           </LinkComponent>
         </div>

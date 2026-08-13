@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+    <title>SQL Injection Lab</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>SQL Injection Practice Lab</h1>
+    <p class="warning">Local educational demo. This app is intentionally vulnerable.</p>
+
+    <div class="cards">
+        <a class="card" href="/vulnerable-login">
+            <h2>🔓 Vulnerable Login</h2>
+            <p>Uses unsafe SQL string concatenation.</p>
+        </a>
+
+        <a class="card" href="/safe-login">
+            <h2>🔒 Safe Login</h2>
+            <p>Uses parameterized SQL queries.</p>
+        </a>
+
+        <a class="card" href="/users">
+            <h2>👥 View Demo Users</h2>
+            <p>See the local SQLite records.</p>
+        </a>
+    </div>
+
+    <h3>Normal test credentials</h3>
+    <pre>username: admin
+password: admin123</pre>
+
+    <p>Use only this local lab for SQL injection practice.</p>
+</div>
+</body>
+</html>

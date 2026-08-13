@@ -5,15 +5,21 @@ import { scanAPI } from "@/api/scanApi";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  BarChart,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  Search,
-} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
-// import Link from "next/link";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+import { Shield, Clock, AlertCircle, CheckCircle, Search } from "lucide-react";
+
+import { StatCard } from "@/components/status-card/stat-card";
 import LinkComponent from "@/components/ui/Link";
 import ScanDialog from "@/components/Scan/ScanDialog";
 
@@ -38,28 +44,6 @@ const getHighestSeverity = (
   if ((summary.low || 0) > 0) return "low";
 
   return "info";
-};
-
-const getSeverityColor = (severity: string) => {
-  switch (severity) {
-    case "critical":
-      return "text-red-500";
-
-    case "high":
-      return "text-orange-400";
-
-    case "medium":
-      return "text-yellow-400";
-
-    case "low":
-      return "text-green-400";
-
-    case "info":
-      return "text-blue-400";
-
-    default:
-      return "text-gray-400";
-  }
 };
 
 const formatDate = (date: string) => {
@@ -118,204 +102,234 @@ export default function ScansPage() {
     return total + (scan.severity_summary?.low || 0);
   }, 0);
 
+  const numberOfIssue = (summary: Record<string, number> | null) => {
+    if (!summary) return 0;
+    return (
+      (summary.critical || 0) +
+      (summary.high || 0) +
+      (summary.medium || 0) +
+      (summary.low || 0)
+    );
+  };
+
+  /**
+   * Get severity badge
+   */
+  const getSeverityBadge = (severity: Severity) => {
+    switch (severity) {
+      case "critical":
+        return (
+          <Badge className="bg-red-500/20 text-red-700 hover:bg-red-500/30">
+            Critical
+          </Badge>
+        );
+
+      case "high":
+        return (
+          <Badge className="bg-orange-500/20 text-orange-700 hover:bg-orange-500/30">
+            High
+          </Badge>
+        );
+
+      case "medium":
+        return (
+          <Badge className="bg-yellow-500/20 text-yellow-700 hover:bg-yellow-500/30">
+            Medium
+          </Badge>
+        );
+
+      case "low":
+        return (
+          <Badge className="bg-green-500/20 text-green-700 hover:bg-green-500/30">
+            Low
+          </Badge>
+        );
+
+      case "info":
+        return (
+          <Badge className="bg-blue-500/20 text-blue-700 hover:bg-blue-500/30">
+            Info
+          </Badge>
+        );
+
+      default:
+        return <Badge variant="outline">{severity}</Badge>;
+    }
+  };
+
   return (
-    <div className=" bg-background">
-      <main className="p-4">
-        {/* WELCOME */}
-        <div className="mb-8">
-          <h1 className="mb-2 font-mono text-2xl text-accent glow-text">
-            SYSTEM_ONLINE
-          </h1>
+    <div className="space-y-8">
+      {/* HEADER */}
+      <div>
+        <h2 className="mb-2 text-3xl font-bold text-foreground">
+          Security Scans
+        </h2>
 
-          <p className="font-mono text-sm text-muted-foreground">
-            // Last activity: 2 minutes ago | Operator: User
-          </p>
-        </div>
+        <p className="text-muted-foreground">
+          Monitor and analyze your web application security scans
+        </p>
+      </div>
 
-        {/* STATS */}
-        <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <StatCard
-            label="Total Scans"
-            value={totalScans.toString()}
-            icon={BarChart}
-            color="text-blue-400"
-            index={1}
-          />
+      {/* STATS */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          title="Total Scans"
+          value={totalScans.toString()}
+          description="All time scans"
+          icon={Shield}
+        />
 
-          <StatCard
-            label="Critical Issues"
-            value={criticalIssues.toString()}
-            icon={AlertTriangle}
-            color="text-red-500"
-            index={2}
-          />
+        <StatCard
+          title="Critical Threats"
+          value={criticalIssues.toString()}
+          description="Requires attention"
+          icon={AlertCircle}
+          trend={{
+            value: criticalIssues,
+            label: "critical issues",
+            positive: false,
+          }}
+        />
 
-          <StatCard
-            label="Resolved"
-            value={resolvedIssues.toString()}
-            icon={CheckCircle}
-            color="text-green-400"
-            index={3}
-          />
+        <StatCard
+          title="Resolved Issues"
+          value={resolvedIssues.toString()}
+          description="Low severity issues"
+          icon={CheckCircle}
+          trend={{
+            value: resolvedIssues,
+            label: "resolved",
+            positive: true,
+          }}
+        />
 
-          <StatCard
-            label="Avg Scan Time"
-            value="4m 32s"
-            icon={Clock}
-            color="text-cyan-400"
-            index={4}
-          />
-        </div>
+        <StatCard
+          title="Avg Scan Time"
+          value="4.2m"
+          description="Per domain"
+          icon={Clock}
+        />
+      </div>
 
-        {/* SEARCH + NEW SCAN */}
-        <div className="terminal-border mb-6 border border-accent/30 bg-card/50 p-4">
-          <div className="flex flex-col gap-4 md:flex-row">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+      {/* SEARCH + NEW SCAN */}
+      <Card className="border-border">
+        <CardHeader>
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <CardTitle>Scan History</CardTitle>
 
-              <Input
-                placeholder="$ search_targets..."
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                className="h-10 rounded-none border-accent/20 bg-background/50 pl-10 font-mono text-sm text-foreground placeholder:text-muted-foreground/50 focus-visible:border-accent focus-visible:ring-accent"
-              />
+            <div className="flex w-full flex-col gap-3 sm:flex-row md:w-auto">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+
+                <Input
+                  placeholder="Search domains..."
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  className="w-full pl-9 sm:w-64"
+                />
+              </div>
+
+              <ScanDialog />
             </div>
-
-            <ScanDialog />
           </div>
-        </div>
+        </CardHeader>
 
-        {/* SCAN COUNT */}
-        <div className="mb-4 font-mono text-xs text-muted-foreground">
-          // SHOWING {filteredScans.length} OF {scans.length} SCANS
-        </div>
-
-        {/* LOADING */}
-        {loading && (
-          <div className="py-10 text-center font-mono text-sm text-accent">
-            // LOADING_SCAN_DATA...
+        <CardContent>
+          {/* SCAN COUNT */}
+          <div className="mb-4 text-sm text-muted-foreground">
+            Showing {filteredScans.length} of {scans.length} scans
           </div>
-        )}
 
-        {/* EMPTY STATE */}
-        {!loading && filteredScans.length === 0 && (
-          <div className="terminal-border border border-accent/30 bg-card/50 p-8 text-center">
-            <p className="font-mono text-sm text-muted-foreground">
-              // NO_SCANS_FOUND
-            </p>
-          </div>
-        )}
+          {/* LOADING */}
+          {loading && (
+            <div className="py-10 text-center text-sm text-muted-foreground">
+              Loading scan data...
+            </div>
+          )}
 
-        {/* SCANS */}
-        {!loading && (
-          <div className="space-y-3">
-            {filteredScans.map((scan) => {
-              const severity = getHighestSeverity(scan.severity_summary);
+          {/* EMPTY STATE */}
+          {!loading && filteredScans.length === 0 && (
+            <div className="rounded-lg border border-dashed border-border py-10 text-center">
+              <p className="text-sm text-muted-foreground">No scans found</p>
+            </div>
+          )}
 
-              const vulnerabilityCount = scan.results?.length || 0;
+          {/* SCAN TABLE */}
+          {!loading && filteredScans.length > 0 && (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-foreground">Domain</TableHead>
 
-              return (
-                <div
-                  key={scan.id}
-                  className="terminal-border group border border-accent/30 bg-card/50 p-4 transition-colors hover:bg-card/80"
-                >
-                  <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-5">
-                    {/* TARGET */}
-                    <div>
-                      <p className="font-mono text-sm text-foreground transition-colors group-hover:text-accent">
-                        {scan.url}
-                      </p>
+                    <TableHead className="text-foreground">Severity</TableHead>
 
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        {formatDate(scan.timestamp)}
-                      </p>
-                    </div>
+                    <TableHead className="text-foreground">
+                      Threats Found
+                    </TableHead>
 
-                    {/* SEVERITY */}
-                    <div className="flex items-center gap-2">
-                      <AlertTriangle
-                        className={`h-4 w-4 ${getSeverityColor(severity)}`}
-                      />
+                    <TableHead className="text-foreground">Status</TableHead>
 
-                      <span
-                        className={`font-mono text-sm ${getSeverityColor(
-                          severity,
-                        )}`}
-                      >
-                        {severity.toUpperCase()}
-                      </span>
-                    </div>
+                    <TableHead className="text-foreground">Date</TableHead>
 
-                    {/* VULNERABILITIES */}
-                    <div>
-                      <p className="font-mono text-sm text-foreground">
-                        <span className="text-red-500">
-                          {vulnerabilityCount}
-                        </span>{" "}
-                        vulns detected
-                      </p>
+                    <TableHead className="text-right text-foreground">
+                      Action
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
 
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        issues_found
-                      </p>
-                    </div>
+                <TableBody>
+                  {filteredScans.map((scan) => {
+                    const severity = getHighestSeverity(scan.severity_summary);
 
-                    {/* STATUS */}
-                    <div>
-                      <span className="font-mono text-xs text-green-400">
-                        ✓ COMPLETED
-                      </span>
-                    </div>
+                    return (
+                      <TableRow key={scan.id}>
+                        {/* DOMAIN */}
+                        <TableCell className="font-medium text-foreground">
+                          {scan.url}
+                        </TableCell>
 
-                    {/* ACTIONS */}
-                    <div className="flex items-center justify-end gap-2">
-                      <LinkComponent href={`/dashboard/scans/${scan.id}`}>
-                        <Button
-                          size="sm"
-                          className="rounded-none border-border/30 font-mono text-xs"
-                        >
-                          REPORT
-                        </Button>
-                      </LinkComponent>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </main>
-    </div>
-  );
-}
+                        {/* SEVERITY */}
+                        <TableCell>{getSeverityBadge(severity)}</TableCell>
 
-/**
- * STAT CARD
- */
-interface StatCardProps {
-  label: string;
-  value: string;
-  icon: React.ElementType;
-  color: string;
-  index: number;
-}
+                        {/* THREATS */}
+                        <TableCell className="text-foreground">
+                          {numberOfIssue(scan.severity_summary) || 0}
+                        </TableCell>
 
-function StatCard({ label, value, icon: Icon, color, index }: StatCardProps) {
-  return (
-    <div className="terminal-border border border-accent/30 bg-card/50 p-4 transition-colors hover:bg-card/80">
-      <div className="mb-3 flex items-start justify-between">
-        <Icon className={`h-5 w-5 ${color}`} />
+                        {/* STATUS */}
+                        <TableCell>
+                          <Badge className="bg-green-500/20 text-green-700 hover:bg-green-500/30">
+                            Completed
+                          </Badge>
+                        </TableCell>
 
-        <span className="font-mono text-xs text-muted-foreground">
-          sys.{index}
-        </span>
-      </div>
+                        {/* DATE */}
+                        <TableCell className="text-muted-foreground">
+                          {formatDate(scan.timestamp)}
+                        </TableCell>
 
-      <div className="font-mono">
-        <p className="text-2xl font-bold text-foreground">{value}</p>
-
-        <p className="mt-2 text-xs text-muted-foreground">{label}</p>
-      </div>
+                        {/* ACTION */}
+                        <TableCell className="text-right">
+                          <LinkComponent href={`/dashboard/scans/${scan.id}`}>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-accent hover:bg-accent/10"
+                            >
+                              View Report
+                            </Button>
+                          </LinkComponent>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
