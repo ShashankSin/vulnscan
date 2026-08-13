@@ -387,7 +387,7 @@ export default function ScanDialog() {
 
                                   {item.details && (
                                     <div className="rounded-md border border-border bg-muted p-3">
-                                      <p className="break-words font-mono text-xs text-muted-foreground">
+                                      <p className="wrap-break-word font-mono text-xs text-muted-foreground">
                                         {item.details}
                                       </p>
                                     </div>

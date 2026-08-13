@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <title>Safe Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <a href="/">← Home</a>
+    <h1>🔒 Safe Login</h1>
+
+    <div class="safe">
+        This page uses a parameterized SQL query.
+    </div>
+
+    <form method="post">
+        <label>Username</label>
+        <input name="username" autocomplete="off">
+
+        <label>Password</label>
+        <input name="password" type="password">
+
+        <button type="submit">Login</button>
+    </form>
+
+    {% if result is not none %}
+        {% if result|length > 0 %}
+            <div class="success">Login matched a user.</div>
+            {% for row in result %}
+                <div class="result">
+                    ID: {{ row["id"] }} |
+                    Username: {{ row["username"] }} |
+                    Role: {{ row["role"] }}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="error">No matching user.</div>
+        {% endif %}
+    {% endif %}
+</div>
+</body>
+</html>
